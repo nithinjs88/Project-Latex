@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+\date{}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{amsfonts,amsthm}
+\restylefloat{figure}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{array}% http://ctan.org/pkg/array
+\usepackage{fullpage}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}         [theorem]{Lemma}
+
+
+\topmargin -1.5cm        % read Lamport p.163
+\oddsidemargin -0.04cm   % read Lamport p.163
+\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+\textwidth 16.59cm
+\textheight 24.94cm
+\linespread{1.5}
+\begin{document}
+\centerline{ \huge{\bf SURVEY REPORT}}
+\centerline{{\bf NITHIN JOSHUA STEPHEN}}
+\centerline{{\bf CS14M033}}
+\vspace{0.4cm}
+\section*{Introduction}
+%Give a 3-5 page survey on topics centred around the paper you have chosen. Clearly cite your chosen ``starting point" paper in the very first paragraph. Ensure that you put in the effort to search for relevant papers that were published subsequent to your chosen paper. You can find them by using Google scholar and other citation indices that provide you with information about which papers are citing your chosen paper.
+All traditional operating systems follow a monolithic kernel architecture in which the entire functions of the operating system reside in a single kernel. The entire operating system functionalities is working in kernel address space. Since the entire functionalities are incorporated into the kernel, the size of the kernel tends to be huge. In contrast, in a  microkernel architecture only the essential functionalities needed by the operating system is incorporated into the kernel. These functions work in kernel space and run in supervisor mode. These essential functions include  low-level address space management, thread management, and inter-process communication. Other functions like device drivers for sound, network run in user space. This results in a significant reduction of size compared to monolithic kernels. Genode OS follows microkernel architecture with emphasis on security where security critical functions are seperated from the rest of the OS. 
+\section*{Architecture}
+In genode, a program(components) runs in a sandbox called protection domain. The components need to communicate with each other in a secure manner. These components interact with each other through remote procedural calls(RPC). Each component implements an RPC interface which allows other components to access its functions(capability). So a components is similar to an Object in object oriented terms and capability to a pointer. So only if a component has a capability to other component, then only it can interact with it through remote procedural calls. Capabilities enable components to call methods of RPC objects provided by different
+protection domains.
+\\
+In genode, every component other than the top level component has a parent. So when a child component is created, the parent assigns a fraction of its resources to the child. A component which provides a service(say GUI) announces the service to its parent. If a component requires a service, the component sends a session request to its parent. The component providing the service is termed server and the component availing the service is termed client. The client obtains the capability to the server and avails the service.
+\newpage
+%\section*{References}
+%You MUST include references. They don't count towards any of the page limits mentioned, so you can put in as many references as needed. Also, you are strongly advised to use bibtex.
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+  D.Dolev,N.A.Lynch,S.S.Pinter,E.W.Stark,W.E.Weihl
+  \emph{Reaching approximate agreement in the presence of faults.}
+  J. ACM, 33:499–516, May 1986.
+\bibitem{lamport94}
+  L. Tseng and N. H. Vaidya
+  \emph{Iterative Approximate
+Byzantine Consensus under a Generalized Fault
+Model.}
+  2012
+\bibitem{lamport94}
+  M. H. Azadmanesh and R. Kieckhafer
+  \emph{Asynchronous
+approximate agreement in partially connected
+networks.}
+  2002
+\bibitem{lamport94}
+  Nitin Vaidya
+  \emph{Iterative Byzantine Vector Consensus in Incomplete Graphs}
+  2014
+  \bibitem{lamport94}
+  Nitin Vaidya,Lewis Tseng,Guanfeng Liang
+  \emph{Iterative Approximate Byzantine Consensus
+in Arbitrary Directed Graphs}
+  2012
+\end{thebibliography}
+\end{document}
+
+

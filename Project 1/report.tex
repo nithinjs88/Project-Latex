@@ -1,0 +1,172 @@
+
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+%\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{caption}
+\usepackage{subcaption}
+%\graphicspath{{C:/Users/Chanti/Downloads/}}
+
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Indian Institute of Technology} \\[0.5cm]
+\textsc{\LARGE Madras}\\[1cm] % Name of your university/college
+%\textsc{\Large M Tech Project - 1}\\[0.5cm] % Major heading such as course name
+%\textsc{\large Minor Heading}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \LARGE \bfseries Running TraceTool in Genode for sabrelite platform}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Nithin Joshua Stephen (CS14M033) % Your name
+\end{flushleft}
+%\begin{flushleft} \large
+ % Your name
+%\end{flushleft} % Your name
+\end{minipage}
+~
+\begin{minipage}{0.5\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+Prof.  \textsc{Kamakoti} % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\ [1cm]% Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{iitmlogo2}\\[1cm] % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
+\begin{abstract}
+ACE(AXI coherency extensions) cache controller is a method to solve the cache coherence problem in shared memory with multi processor system.It takes less number of cycles then already existing methods.Previoues existing systems cache  updated through write through method so every time it updates in main memory.In our method we will update the data by using MESIF protocal and if the data is unavailable in one cache it can access from another cache but in previoues existed system it goes to main memory
+
+\end{abstract}
+
+\section{How to implement?}
+
+cache coherence problem will be implemented by using snooping method.this method listens the every operation of the processors and perform the MESIF protocal based on that operation.
+
+\section{MESIF protocal}
+%\newline
+Modified\newline The cache line is present only in the current cache, and is dirty; it has been modified from the value in main memory. The cache is required to write the data back to main memory at some time in the future, before permitting any other read of the (no longer valid) main memory state. The write-back changes the line to the Exclusive state \newline \newline Exclusive \newline The cache line is present only in the current cache, but is clean; it matches main memory. It may be changed to the Shared state at any time, in response to a read request. Alternatively, it may be changed to the Modified state when writing to it.\newline \newline Shared \newline Indicates that this cache line may be stored in other caches of the machine and is clean; it matches the main memory. The line may be discarded (changed to the Invalid state) at any time.\newline \newline \newline
+Invalid \newline Indicates that this cache line is invalid (unused).\newline \newline Forward \newline The F state is a specialized form of the S state, and indicates that a cache should act as a designated responder for any requests for the given line. The protocol ensures that, if any cache holds a line in the S state, at most one (other) cache holds it in the F state.
+%\newpage
+%\begin{figure}
+%	\centering
+ %\begin{subfigure}{.5\textwidth}
+%	\centering
+%		\includegraphics[width=.5\linewidth]{rsa1}%		\caption{rsa.c}
+%		\label{fig:sub1}
+%	\end{subfigure}%
+%	\begin{subfigure}{.5\textwidth}
+%		\centering
+%		\includegraphics[width=1.0\linewidth]{rsa2}
+%		\caption{rsa.h}
+%		\label{fig:sub2}
+%	\end{subfigure}
+%	\caption{RSA Dependency graph}
+%	\label{fig:test}
+%\end{figure}
+\section{AXI BUS}
+Here in our project we are using AXI bus.ACE, defined as part of the AMBA 4 specification, extends AXI with additional signalling introducing system wide coherency. This system coherency allows multiple processors to share memory and enables technology.
+\section{What Done Till now}
+i have studied the different protocals of cache coherence,I have modified the cache controller as per our requirement and i started the snoop mechanism 
+\begin{figure}[ht]
+	
+	%\begin{subfigure}{0.5\textwidth}
+		
+	%\centering
+		%\includegraphics[width=1.5\textwidth]{amba.jpg}
+		%\caption{amba.c}
+%		\label{fig:sub3}
+%\end{subfigure}%
+%	\begin{subfigure}{.5\textwidth}
+%		\centering
+%		\includegraphics[width=1.0\linewidth]{bignum2}
+%		\caption{bignum.h}
+%		\label{fig:sub4}
+%	\end{subfigure}
+	%\caption{Bignum Dependency graph}
+	%label{fig:test2}
+\end{figure}
+\newpage
+
+%\section{AHB Master-Slave}
+%AHB implements the features required for high-performance, high clock
+%frequency systems including:
+%\newline
+%•burst transfers
+%\newline
+%\newline
+%•
+%single-clock edge operation
+%\newline
+%•
+%non-tristate implementation
+%\newline
+%•
+%wide data bus configurations, 64, 128, 256, 512, and 1024 bits.
+
+
+%\includegraphics[width=1.5\textwidth]{out10.jpg}
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[width=1.5\textwidth]{out11.jpg}
+%\caption{AHB Master to slave communication}
+%\end{figure}
+%The most common AHB-Lite slaves are internal memory devices, external memory
+%interfaces, and high bandwidth peripherals. Although low-bandwidth peripherals can be
+%included as AHB-Lite slaves, for system performance reasons they typically reside on
+%the AMBA Advanced Peripheral Bus (APB). Bridging between this higher level of bus
+%and APB is done using a AHB-Lite slave, known as an APB bridge.
+%AHB Master to slave communication diag shows a single master AHB-Lite system design with one AHB-Lite master
+%and three AHB-Lite slaves. The bus interconnect logic consists of one address decoder
+%and a slave-to-master multiplexor. The decoder monitors the address from the master so
+%that the appropriate slave is selected and the multiplexor routes the corresponding slave
+%output data back to the master.
+
+
+\end{document}

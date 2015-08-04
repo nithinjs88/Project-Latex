@@ -24,48 +24,126 @@
 \textheight 24.94cm
 \linespread{1.5}
 \begin{document}
-\centerline{ \huge{\bf SURVEY REPORT}}
-\centerline{{\bf NITHIN JOSHUA STEPHEN}}
-\centerline{{\bf CS14M033}}
-\vspace{0.4cm}
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Indian Institute of Technology} \\[0.5cm]
+\textsc{\LARGE Madras}\\[1cm] % Name of your university/college
+%\textsc{\Large M Tech Project - 1}\\[0.5cm] % Major heading such as course name
+%\textsc{\large Minor Heading}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \LARGE \bfseries Running TraceTool in Genode for sabrelite platform}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Nithin Joshua Stephen (CS14M033) % Your name
+\end{flushleft}
+%\begin{flushleft} \large
+ % Your name
+%\end{flushleft} % Your name
+\end{minipage}
+~
+\begin{minipage}{0.5\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+Prof.  \textsc{Kamakoti} % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large 04-Aug-2015}\\ [1cm]% Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{iitmlogo2}\\[1cm] % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\pagenumbering{gobble}
+\newpage
+\pagenumbering{arabic}
 \section*{Introduction}
 %Give a 3-5 page survey on topics centred around the paper you have chosen. Clearly cite your chosen ``starting point" paper in the very first paragraph. Ensure that you put in the effort to search for relevant papers that were published subsequent to your chosen paper. You can find them by using Google scholar and other citation indices that provide you with information about which papers are citing your chosen paper.
 All traditional operating systems follow a monolithic kernel architecture in which the entire functions of the operating system reside in a single kernel. The entire operating system functionalities is working in kernel address space. Since the entire functionalities are incorporated into the kernel, the size of the kernel tends to be huge. In contrast, in a  microkernel architecture only the essential functionalities needed by the operating system is incorporated into the kernel. These functions work in kernel space and run in supervisor mode. These essential functions include  low-level address space management, thread management, and inter-process communication. Other functions like device drivers for sound, network run in user space. This results in a significant reduction of size compared to monolithic kernels. Genode OS follows microkernel architecture with emphasis on security where security critical functions are seperated from the rest of the OS. 
 \section*{Architecture}
-In genode, a program(components) runs in a sandbox called protection domain. The components need to communicate with each other in a secure manner. These components interact with each other through remote procedural calls(RPC). Each component implements an RPC interface which allows other components to access its functions(capability). So a components is similar to an Object in object oriented terms and capability to a pointer. So only if a component has a capability to other component, then only it can interact with it through remote procedural calls. Capabilities enable components to call methods of RPC objects provided by different
+In genode, a program(components) runs in a sandbox called protection domain. The components need to communicate with each other in a secure manner. These components interact with each other through remote procedural calls(RPC). Each component implements an RPC interface which allows other components to access its functions(capability). So a components is similar to an \textit{object} in object oriented terms and capability to a \textit{pointer}. So only if a component has a capability to other component, then only it can interact with it through remote procedural calls. Capabilities enable components to call methods of RPC objects provided by different
 protection domains.
 \\
 In genode, every component other than the top level component has a parent. So when a child component is created, the parent assigns a fraction of its resources to the child. A component which provides a service(say GUI) announces the service to its parent. If a component requires a service, the component sends a session request to its parent. The component providing the service is termed server and the component availing the service is termed client. The client obtains the capability to the server and avails the service.
+\section*{Code Structure}
+The genode code structure is organized as follows
+\begin{itemize}
+\item repos - This folder contains the core part of source code which is further subdivided into mainly
+\begin{itemize}
+\item base - This tree contains code written by the creators of genode which can be used by developers to their liking.
+\item base-hw - This tree contains code written for basic ARM hardware.
+\item os - This tree contains the basic functionalities like device drivers and other system services.
+\item libports - This directory contains ports of popular 3rd-party software to Genode.
+\item ports - This directory contains ports of popular 3rd-party applications to Genode.
+\end{itemize}
+\item tool - This directory contains tools for managing and using the source code for various platforms.
+\end{itemize}
+\subsection*{Compilation}
+To compile a custom component, we do a make on a run file(.run extension) with a location relative to a tree inside repos folder. If a run file say hello.run is located in repos/base/run we do \textit{make run/hello}. The makefile first has to find the corresponding run file. This is specified in a build.conf file located in build/\$platform/etc where \$platform is the platform on which we try to build. Here it is hw\_sabrelite. After locating the run file, it decides which all objects which it has to build. This is specified in attribute build\_objs in the run file. To build an object, it scans for target.mk makefile which tells genode system which all source files needs to be compiled, which all headers files need to be included, libraries required and the name of the target file to be formed. A object to be build may be dependent on other libraries. These dependencies are generated by dep\_prg.mk and dep\_lib.mk residing in repos/base/mk folder.  These dependencies are written to a dynamic makefile libdeps located in build/\$platform/var folder. Then make is done on the libdeps file to complete the compilation phase. The build objects are then combined to form the boot image. The list of files to be combined is specified in the variable build\_image. The build\_image can contain other executables which are not created in our current compilation phase. These executables need to created prior running our compilation. For example, the dynamic linker in genode(ld.lib.so) is to be created for complex components by executing \textit{make test/ldso}.
+\section*{TraceTool}
+TraceTool is developed by Duss Pirmin and is helpful in debugging genode programs. It reads the trace messages from the Genode OS framework and sends them over a terminal session. The essential components are
+\begin{itemize}
+\item Dut - Device under trace which contains timer functions for starting and stopping the trace session.
+\item TraceTool - The implementation of the actual trace session based on Model View Controller architecture.
+\end{itemize}
+The compilation of TraceTool is successful for hw\_sabrelite platform while the creation of the final boot image is unsuccessful as it needs the executable nic\_drv which is the NIC driver developed for the platform on Genode.
+\section*{Work Done}
+\begin{itemize}
+\item Studied advanced C++ concepts such as polymorphism, inheritance, virtual functions, templates and exceptions.
+\item Studied about architecture and build system of genode.
+\item Integrated sabrelite support(already implemented in an earlier version) to latest genode version.
+\item Studied about NIC driver implementation in genode for x86 platforms.
+\end{itemize}
+\section*{Future Work}
+NIC driver has been developed in genode for x86\_32 and x86\_64 platforms but not developed for ARM architecture. Since sabrelite uses ARM architecture, development of NIC driver is crucial for network related functionalties to be impemented in Genode for sabrelite platform.
 \newpage
 %\section*{References}
 %You MUST include references. They don't count towards any of the page limits mentioned, so you can put in as many references as needed. Also, you are strongly advised to use bibtex.
 \begin{thebibliography}{9}
 
 \bibitem{lamport94}
-  D.Dolev,N.A.Lynch,S.S.Pinter,E.W.Stark,W.E.Weihl
-  \emph{Reaching approximate agreement in the presence of faults.}
-  J. ACM, 33:499–516, May 1986.
+  Norman Freske
+  \emph{Genode Operating System Framework.}
 \bibitem{lamport94}
-  L. Tseng and N. H. Vaidya
-  \emph{Iterative Approximate
-Byzantine Consensus under a Generalized Fault
-Model.}
-  2012
+  https://github.com/genodelabs/genode
 \bibitem{lamport94}
-  M. H. Azadmanesh and R. Kieckhafer
-  \emph{Asynchronous
-approximate agreement in partially connected
-networks.}
-  2002
-\bibitem{lamport94}
-  Nitin Vaidya
-  \emph{Iterative Byzantine Vector Consensus in Incomplete Graphs}
-  2014
-  \bibitem{lamport94}
-  Nitin Vaidya,Lewis Tseng,Guanfeng Liang
-  \emph{Iterative Approximate Byzantine Consensus
-in Arbitrary Directed Graphs}
-  2012
+  https://github.com/trimpim/TraceTool/
 \end{thebibliography}
 \end{document}
 

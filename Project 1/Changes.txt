@@ -1,0 +1,8 @@
+The genode code structure is organized as follows
+1) repos - This folder contains the core part of source code which is further subdivided into mainly
+	a) base - This tree contains code written by the creators of genode which can be used by developers to their liking.
+	b) base-hw - This tree contains code written for basic ARM hardware.
+	c) os - This tree contains the basic functionalities like device drivers and other system services.
+
+Execution
+
